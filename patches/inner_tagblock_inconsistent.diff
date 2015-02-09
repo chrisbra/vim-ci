@@ -10,7 +10,7 @@ diff --git a/src/normal.c b/src/normal.c
 +		 * (note leading whitespace)
 +		 * 1) <b>      2) <b>
 +		 *    foobar      foobar
-+		 *    </b>            </b>
++		 *    </b>            </b> */
 +		cap->retval |= CA_NO_ADJ_OP_END;
  		flag = current_tagblock(cap->oap, cap->count1, include);
  		break;
