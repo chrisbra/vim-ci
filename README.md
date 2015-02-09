@@ -11,11 +11,7 @@ Feedback and contributions welcome!
 
 [![Build Status](https://travis-ci.org/chrisbra/vim-ci.svg)](https://travis-ci.org/chrisbra/vim-ci)
 
-<<<<<<< HEAD
 You can see the build results at https://travis-ci.org/chrisbra/vim-ci. Builds are currently triggered manually,
-=======
-You can see the build results at https://travis-ci.org/chrisbra/builds. Builds are currently triggered manually,
->>>>>>> aafc00ff2a2f3fa504bc2a2f7b33da1753987767
 but might eventually run at fixed intervals (e.g. once every day).
 
 ## How to test Vim patches
