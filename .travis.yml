@@ -1,0 +1,43 @@
+os:
+  - linux
+language: c
+compiler:
+  - gcc
+  - clang
+env:
+  matrix:
+    - FEATURES=tiny
+    - FEATURES=small
+    - FEATURES=normal
+    - FEATURES=big
+    - FEATURES=huge
+sudo: false
+cache:
+  directories:
+    - vim-src
+before_install:
+  # Set up hg purge.
+  - printf '[extensions]\npurge = \n' > ~/.hgrc
+install: |
+  if [ ! -d $TRAVIS_BUILD_DIR/vim-src/.hg ]; then
+    hg clone https://code.google.com/p/vim $TRAVIS_BUILD_DIR/vim-src
+  else
+    hg pull -u -R $TRAVIS_BUILD_DIR/vim-src
+  fi
+before_script:
+    - find "$TRAVIS_BUILD_DIR"/patches -type f -not -path '*/.*' -exec sh -c 'cd "$TRAVIS_BUILD_DIR"/vim-src && hg import --no-commit "$1"' find-sh {} \;
+    - rm -rf "$TRAVIS_BUILD_DIR"/vim-src/src/po
+script:
+  - cd $TRAVIS_BUILD_DIR/vim-src/src
+  - export TERM=vt100
+  - ./configure --with-features=$FEATURES >/dev/null
+  - make
+  - ./vim --version
+  - make test
+  # Clean up, otherwise build results will be cached by Travis.
+  - cd ..
+  # Remove all files not in the repo, even the ignored ones.
+  - rm .hgignore
+  - hg purge
+  # hg update --clean will restore .hgignore.
+  - hg update --clean
