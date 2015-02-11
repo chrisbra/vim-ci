@@ -64,3 +64,28 @@ diff --git a/src/normal.c b/src/normal.c
  }
  
  /*
+diff --git a/src/testdir/test44.in b/src/testdir/test44.in
+--- a/src/testdir/test44.in
++++ b/src/testdir/test44.in
+@@ -42,6 +42,12 @@ G:put =matchstr(\"אבגד\", \".\", 0, 
+ :put =matchstr(\"אבגד\", \"..\", 0, 2) " בג
+ :put =matchstr(\"אבגד\", \".\", 0, 0) " א
+ :put =matchstr(\"אבגד\", \".\", 4, -1) " ג
++:sp +enew
++:$put =['dog(a', 'cat(']
++/(/e+
++"ayn:bd!
++:$put =''
++G0"ap
+ :w!
+ :qa!
+ ENDTEST
+diff --git a/src/testdir/test44.ok b/src/testdir/test44.ok
+--- a/src/testdir/test44.ok
++++ b/src/testdir/test44.ok
+@@ -22,3 +22,5 @@ k œ̄ṣ́m̥̄ᾱ̆́
+ בג
+ א
+ ג
++a
++cat(
