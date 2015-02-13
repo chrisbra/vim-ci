@@ -19,6 +19,15 @@ diff --git a/src/screen.c b/src/screen.c
  			    n_extra -= vcol_off;
  #endif
  		    }
+@@ -4625,7 +4625,7 @@ win_line(wp, lnum, startrow, endrow, noc
+ 		    /* Make sure, the highlighting for the tab char will be
+ 		     * correctly set further below (effectively reverts the
+ 		     * FIX_FOR_BOGSUCOLS macro */
+-		    if (old_boguscols > 0 && n_extra > tab_len && wp->w_p_list
++		    if ((old_boguscols > 0 || n_extra > tab_len) && wp->w_p_list
+ 								  && lcs_tab1)
+ 			tab_len += n_extra - tab_len;
+ #endif
 diff --git a/src/testdir/test_listlbr_utf8.in b/src/testdir/test_listlbr_utf8.in
 --- a/src/testdir/test_listlbr_utf8.in
 +++ b/src/testdir/test_listlbr_utf8.in
