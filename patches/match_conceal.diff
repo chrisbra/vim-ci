@@ -362,6 +362,7 @@ new file mode 100644
 +:if &enc !=? 'utf-8'|:e! test.ok|:w! test.out|qa!|endif
 +:" Make sure, for dumb terminals, Conceal is different
 +:hi Conceal term=underline
++:hi ErrorMsg term=bold
 +:10new|:vsp|:vert resize 20
 +:put =\"\#\ This\ is\ a\ Test\"
 +:norm! mazt
@@ -493,7 +494,6 @@ new file mode 100644
 +:redraw!
 +:let line=ScreenChar(winwidth(0),1)
 +:call ScreenAttr(1,[1,2,7,10,12,16], "0!=1 && 1!=2 && 0==2 && 0==3 && 0!=4 && 0!=5 && 1!=4 && 4==5")
-+:"sleep 10
 +:call DoRecordScreen()
 +:$put =a
 +:
