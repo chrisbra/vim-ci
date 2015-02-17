@@ -12,9 +12,9 @@ env:
     - FEATURES=big
     - FEATURES=huge
 sudo: false
-cache: false
-#  directories:
-#    - vim-src
+cache:
+  directories:
+    - vim-src
 before_install:
   # Set up hg purge.
   - printf '[extensions]\npurge = \n' > ~/.hgrc

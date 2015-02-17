@@ -357,11 +357,20 @@ diff --git a/src/testdir/Makefile b/src/testdir/Makefile
  		  then echo flaky test ok first time; \
  		  else rm -rf $*.failed $(RM_ON_RUN); \
  			$(RUN_VIM) $*.in; \
+@@ -115,7 +116,7 @@ test1.out: test1.in
+ 
+ 	# Check if the test.out file matches test.ok.
+ 	@/bin/sh -c "if test -f test.out; then \
+-		  if diff -u test.out $*.ok; \
++		  if diff -N -u5 test.out $*.ok; \
+ 		  then mv -f test.out $*.out; \
+ 		  else echo $* FAILED >>test.log; mv -f test.out $*.failed; \
+ 		  fi \
 diff --git a/src/testdir/test_match_conceal.in b/src/testdir/test_match_conceal.in
 new file mode 100644
 --- /dev/null
 +++ b/src/testdir/test_match_conceal.in
-@@ -0,0 +1,160 @@
+@@ -0,0 +1,161 @@
 +Test for matchadd() and conceal feature
 +
 +STARTTEST
@@ -397,8 +406,9 @@ new file mode 100644
 +:	    :let g:attr_test="FAILED: ".str
 +:	    :let g:attr_test.="\n". join(g:attr, ' ')
 +:	    :let g:attr_test.="\n TERM: ". &term
-+:	    :hi ErrorMsg
-+:	    :hi Conceal
++:	    :redir @A | sil! hi ErrorMsg |redir END
++:	    :redir @A | sil! hi Conceal | redir END
++:	    :let g:attr_test.=@a
 +:	endif
 +:endfu
 +:fu! DoRecordScreen()
