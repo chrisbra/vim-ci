@@ -88,7 +88,7 @@ diff --git a/src/testdir/test88.ok b/src/testdir/test88.ok
 diff --git a/src/testdir/test_listlbr_utf8.in b/src/testdir/test_listlbr_utf8.in
 --- a/src/testdir/test_listlbr_utf8.in
 +++ b/src/testdir/test_listlbr_utf8.in
-@@ -56,6 +56,37 @@ STARTTEST
+@@ -56,6 +56,41 @@ STARTTEST
  :redraw!
  :let line=ScreenChar(winwidth(0),7)
  :call DoRecordScreen()
@@ -122,7 +122,11 @@ diff --git a/src/testdir/test_listlbr_utf8.in b/src/testdir/test_listlbr_utf8.in
 +:norm! zt0
 +GGlGGlGGlGGlGGlGGlGGlGGlGGlGGl
 +:call append('$', ['ScreenAttributes for test6:'])
-+:call append('$', join(attr, ' '))
++:if attr[0] != attr[1] && attr[1] != attr[3] && attr[3] != attr[5]
++:   call append('$', "Attribut 0 and 1 and 3 and 5 are different!")
++:else
++:   call append('$', "Not all attributes are different")
++:endif
  :%w! test.out
  :qa!
  ENDTEST
@@ -140,4 +144,4 @@ diff --git a/src/testdir/test_listlbr_utf8.ok b/src/testdir/test_listlbr_utf8.ok
 +Test 6: Screenattributes for comment
 + /*		 and some more */
 +ScreenAttributes for test6:
-+0 68 68 91 91 68 68 68 68 68
++Attribut 0 and 1 and 3 and 5 are different!
