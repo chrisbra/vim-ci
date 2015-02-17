@@ -352,7 +352,7 @@ diff --git a/src/testdir/test_match_conceal.in b/src/testdir/test_match_conceal.
 new file mode 100644
 --- /dev/null
 +++ b/src/testdir/test_match_conceal.in
-@@ -0,0 +1,158 @@
+@@ -0,0 +1,160 @@
 +Test for matchadd() and conceal feature
 +
 +STARTTEST
@@ -362,7 +362,6 @@ new file mode 100644
 +:if &enc !=? 'utf-8'|:e! test.ok|:w! test.out|qa!|endif
 +:" Make sure, for dumb terminals, Conceal is different
 +:hi Conceal term=underline
-+:hi ErrorMsg term=bold
 +:10new|:vsp|:vert resize 20
 +:put =\"\#\ This\ is\ a\ Test\"
 +:norm! mazt
@@ -427,6 +426,8 @@ new file mode 100644
 +:
 +:let g:test ="Test 4: more match() (should be: #Thisisa Test)"
 +:norm! 'azt
++:hi ErrorMsg term=bold
++:hi Conceal term=underline
 +:call matchadd('ErrorMsg', '\%2l Test', 20, -1, {'conceal': 'X'})
 +:redraw!
 +:let line=ScreenChar(winwidth(0),1)
@@ -489,6 +490,7 @@ new file mode 100644
 +:let g:test ="Test 8: using matchaddpos() (should be #Pis a Test"
 +:norm! 'azt
 +:call clearmatches()
++:hi Conceal term=underline
 +:call matchaddpos('Conceal', [[2,2,6]], 10, -1, {'conceal': 'P'})
 +:let a=getmatches()
 +:redraw!
