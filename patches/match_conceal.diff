@@ -348,30 +348,18 @@ diff --git a/src/testdir/Makefile b/src/testdir/Makefile
  		test_nested_function.out \
  		test_options.out \
  		test_qf_title.out \
-diff --git a/src/testdir/dotest.in b/src/testdir/dotest.in
---- a/src/testdir/dotest.in
-+++ b/src/testdir/dotest.in
-@@ -1,3 +1,4 @@
- :set cp
-+:set term=vt100
- :map dotest /^STARTTESTj:set ff=unix cpo-=A:.,/ENDTEST/-1w! Xdotest:set ff& cpo+=Anj0:so! Xdotestdotest
- dotest
 diff --git a/src/testdir/test_match_conceal.in b/src/testdir/test_match_conceal.in
 new file mode 100644
 --- /dev/null
 +++ b/src/testdir/test_match_conceal.in
-@@ -0,0 +1,162 @@
+@@ -0,0 +1,155 @@
 +Test for matchadd() and conceal feature
 +
 +STARTTEST
 +:so small.vim
-+:if !has("conceal") | e! test.ok | w! test.out | qa! | endif
++:if !has("conceal") || &term=='vt100' | e! test.ok | w! test.out | qa! | endif
 +:so mbyte.vim
 +:if &enc !=? 'utf-8'|:e! test.ok|:w! test.out|qa!|endif
-+:" Make sure, for dumb terminals, Conceal is different
-+:hi Conceal term=underline
-+:hi ErrorMsg term=bold
-+:if &term=='vt100'|set term=ansi|endif
 +:10new|:vsp|:vert resize 20
 +:put =\"\#\ This\ is\ a\ Test\"
 +:norm! mazt
@@ -397,9 +385,6 @@ new file mode 100644
 +:	    :let g:attr_test="FAILED: ".str
 +:	    :let g:attr_test.="\n". join(g:attr, ' ')
 +:	    :let g:attr_test.="\n TERM: ". &term
-+:	    :redir @A | sil! hi ErrorMsg |redir END
-+:	    :redir @A | sil! hi Conceal | redir END
-+:	    :let g:attr_test.=@a
 +:	endif
 +:endfu
 +:fu! DoRecordScreen()
