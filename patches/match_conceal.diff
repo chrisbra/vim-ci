@@ -348,6 +348,15 @@ diff --git a/src/testdir/Makefile b/src/testdir/Makefile
  		test_nested_function.out \
  		test_options.out \
  		test_qf_title.out \
+@@ -106,7 +107,7 @@ test1.out: test1.in
+ 
+ 	# For flaky tests retry one time.
+ 	@/bin/sh -c "if test -f test.out -a $* = test61; then \
+-		  if diff test.out $*.ok; \
++		  if diff -N -u5 test.out $*.ok; \
+ 		  then echo flaky test ok first time; \
+ 		  else rm -rf $*.failed $(RM_ON_RUN); \
+ 			$(RUN_VIM) $*.in; \
 diff --git a/src/testdir/test_match_conceal.in b/src/testdir/test_match_conceal.in
 new file mode 100644
 --- /dev/null
@@ -362,6 +371,7 @@ new file mode 100644
 +:if &enc !=? 'utf-8'|:e! test.ok|:w! test.out|qa!|endif
 +:" Make sure, for dumb terminals, Conceal is different
 +:hi Conceal term=underline
++:hi ErrorMsg term=bold
 +:10new|:vsp|:vert resize 20
 +:put =\"\#\ This\ is\ a\ Test\"
 +:norm! mazt
@@ -387,6 +397,8 @@ new file mode 100644
 +:	    :let g:attr_test="FAILED: ".str
 +:	    :let g:attr_test.="\n". join(g:attr, ' ')
 +:	    :let g:attr_test.="\n TERM: ". &term
++:	    :hi ErrorMsg
++:	    :hi Conceal
 +:	endif
 +:endfu
 +:fu! DoRecordScreen()
@@ -426,8 +438,6 @@ new file mode 100644
 +:
 +:let g:test ="Test 4: more match() (should be: #Thisisa Test)"
 +:norm! 'azt
-+:hi ErrorMsg term=bold
-+:hi Conceal term=underline
 +:call matchadd('ErrorMsg', '\%2l Test', 20, -1, {'conceal': 'X'})
 +:redraw!
 +:let line=ScreenChar(winwidth(0),1)
@@ -490,7 +500,6 @@ new file mode 100644
 +:let g:test ="Test 8: using matchaddpos() (should be #Pis a Test"
 +:norm! 'azt
 +:call clearmatches()
-+:hi Conceal term=underline
 +:call matchaddpos('Conceal', [[2,2,6]], 10, -1, {'conceal': 'P'})
 +:let a=getmatches()
 +:redraw!
