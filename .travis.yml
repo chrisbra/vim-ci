@@ -12,9 +12,9 @@ env:
     - FEATURES=big
     - FEATURES=huge
 sudo: false
-cache: false
-#  directories:
-#    - vim-src
+cache:
+  directories:
+    - vim-src
 before_install:
   # Set up hg purge.
   - printf '[extensions]\npurge = \n' > ~/.hgrc
@@ -39,5 +39,6 @@ script:
   # Remove all files not in the repo, even the ignored ones.
   - rm .hgignore
   - hg purge
+  - hg revert --all
   # hg update --clean will restore .hgignore.
   - hg update --clean
