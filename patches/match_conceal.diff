@@ -352,7 +352,7 @@ diff --git a/src/testdir/test_match_conceal.in b/src/testdir/test_match_conceal.
 new file mode 100644
 --- /dev/null
 +++ b/src/testdir/test_match_conceal.in
-@@ -0,0 +1,154 @@
+@@ -0,0 +1,157 @@
 +Test for matchadd() and conceal feature
 +
 +STARTTEST
@@ -360,6 +360,7 @@ new file mode 100644
 +:if !has("conceal") | e! test.ok | w! test.out | qa! | endif
 +:so mbyte.vim
 +:if &enc !=? 'utf-8'|:e! test.ok|:w! test.out|qa!|endif
++:if empty(&term) | set term=ansi |endif
 +:10new|:vsp|:vert resize 20
 +:put =\"\#\ This\ is\ a\ Test\"
 +:norm! mazt
@@ -383,6 +384,8 @@ new file mode 100644
 +:	    :let g:attr_test="OK: ". str
 +:	else
 +:	    :let g:attr_test="FAILED: ".str
++:	    :let g:attr_test.="\r".g:attr
++:	    :let g:attr_test.="\r TERM: ".&term
 +:	endif
 +:endfu
 +:fu! DoRecordScreen()
