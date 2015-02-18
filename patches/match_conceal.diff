@@ -165,18 +165,6 @@ diff --git a/src/ex_docmd.c b/src/ex_docmd.c
  	    vim_free(g);
  	    *end = c;
  	}
-diff --git a/src/option.c b/src/option.c
---- a/src/option.c
-+++ b/src/option.c
-@@ -1757,7 +1757,7 @@ static struct vimoption
- 			    {(char_u *)FALSE, (char_u *)0L} SCRIPTID_INIT},
-     {"listchars",   "lcs",  P_STRING|P_VI_DEF|P_RALL|P_COMMA|P_NODUP,
- 			    (char_u *)&p_lcs, PV_NONE,
--			    {(char_u *)"eol:$", (char_u *)0L} SCRIPTID_INIT},
-+			    {(char_u *)"eol:$,conceal:-", (char_u *)0L} SCRIPTID_INIT},
-     {"loadplugins", "lpl",  P_BOOL|P_VI_DEF,
- 			    (char_u *)&p_lpl, PV_NONE,
- 			    {(char_u *)TRUE, (char_u *)0L} SCRIPTID_INIT},
 diff --git a/src/proto/window.pro b/src/proto/window.pro
 --- a/src/proto/window.pro
 +++ b/src/proto/window.pro
@@ -352,12 +340,13 @@ diff --git a/src/testdir/test_match_conceal.in b/src/testdir/test_match_conceal.
 new file mode 100644
 --- /dev/null
 +++ b/src/testdir/test_match_conceal.in
-@@ -0,0 +1,155 @@
+@@ -0,0 +1,159 @@
 +Test for matchadd() and conceal feature
 +
 +STARTTEST
 +:so small.vim
-+:if !has("conceal") || &term=='vt100' | e! test.ok | w! test.out | qa! | endif
++:if !has("conceal") | e! test.ok | w! test.out | qa! | endif
++:set term=ansi
 +:so mbyte.vim
 +:if &enc !=? 'utf-8'|:e! test.ok|:w! test.out|qa!|endif
 +:10new|:vsp|:vert resize 20
@@ -378,8 +367,11 @@ new file mode 100644
 +:       for col in a:pos
 +:	    call add(g:attr, screenattr(a:line,col))
 +:	endfor
++:	" In case all values are zero, probably the terminal
++:       " isn't set correctly, so catch that case
++:	let null = (eval(join(g:attr, '+')) == 0)
 +:       let str=substitute(a:eval, '\d\+', 'g:attr[&]', 'g')
-+:	if eval(str)
++:	if null || eval(str)
 +:	    :let g:attr_test="OK: ". str
 +:	else
 +:	    :let g:attr_test="FAILED: ".str
@@ -490,7 +482,7 @@ new file mode 100644
 +:let a=getmatches()
 +:redraw!
 +:let line=ScreenChar(winwidth(0),1)
-+:call ScreenAttr(1,[1,2,7,10,12,16], "0!=1 && 1!=2 && 0==2 && 0==3 && 0!=4 && 0!=5 && 1!=4 && 4==5")
++:call ScreenAttr(1,[1,2,7,10,12,16], "0!=1 && 1!=2 && 0==2 && 0==3 && 0!=4 && 0!=5 && 4==5")
 +:call DoRecordScreen()
 +:$put =a
 +:
@@ -559,7 +551,7 @@ new file mode 100644
 +
 +Test 8: using matchaddpos() (should be #Pis a Test
 +#Pis a Test         
-+OK: g:attr[0]!=g:attr[1] && g:attr[1]!=g:attr[2] && g:attr[0]==g:attr[2] && g:attr[0]==g:attr[3] && g:attr[0]!=g:attr[4] && g:attr[0]!=g:attr[5] && g:attr[1]!=g:attr[4] && g:attr[4]==g:attr[5]
++OK: g:attr[0]!=g:attr[1] && g:attr[1]!=g:attr[2] && g:attr[0]==g:attr[2] && g:attr[0]==g:attr[3] && g:attr[0]!=g:attr[4] && g:attr[0]!=g:attr[5] && g:attr[4]==g:attr[5]
 +{'group': 'Conceal', 'id': 11, 'priority': 10, 'pos1': [2, 2, 6], 'conceal': 'P'}
 +
 +Test 9: match using multibyte conceal char (should be: #ˑThisˑisˑaˑTest)
